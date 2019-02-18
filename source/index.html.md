@@ -198,7 +198,7 @@ Parameter | Description | Required
 --------- | ----------- | -----------
 ASSET | The asset you wish to access | Yes
 ID | The Server reference number for an appliance to retrieve. This is either the asset ID or a BTO specific serial number. | No
-page | If no ID is provided, you can use the `page` parameter to browser through different pages. | No
+page | If no ID is provided, you can use the `page` parameter to browse through different pages. | No
 page_size | If no ID is provided, you can use the `page_size` parameter to change the amount of resources per page.<br>`Default: 15`<br>`Max: 50` | No
 
 <aside class="notice">
