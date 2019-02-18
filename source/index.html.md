@@ -2,14 +2,10 @@
 title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
-  - shell
-  - ruby
-  - python
-  - javascript
+ - php: PHP
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
-  - <a href='https://github.com/lord/slate'>Documentation Powered by Slate</a>
+  - <a href='https://s3s.eu/bto/signup' target='_blank'>Sign Up for an Assets API Key</a>
 
 includes:
   - errors
@@ -19,221 +15,192 @@ search: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+Welcome to the Assets API! You can use our API to access S3S Assets API endpoints, which can give you more information on your order status, serial numbers, checklists, statistics and test results.
 
-We have language bindings in Shell, Ruby, Python, and JavaScript! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
-
-This example API documentation page was created with [Slate](https://github.com/lord/slate). Feel free to edit it and use it as a base for your own API's documentation.
+You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
 
 # Authentication
 
 > To authorize, use this code:
 
-```ruby
-require 'kittn'
+```php
+<?php
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
+$api_key = "YOUR_API_KEY";
+
+$client = new GuzzleHttp\Client([
+  'base_uri' => 'https://s3s.eu/api/v2/',
+  'headers' => [
+    'Authorization' => 'Bearer ' . $api_key,
+    'Accept'        => 'application/json',
+  ]
+]);
+
+?>
 ```
 
-```python
-import kittn
+> Make sure to replace `YOUR_API_KEY` with your API key.
 
-api = kittn.authorize('meowmeowmeow')
-```
+The Assets API uses API keys to allow access to the API. You can request an API key at our [BTO portal](https://s3s.eu/bto/signup).
 
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
+The Assets API expects the API key to be included in all API requests to the server in a header that looks like the following:
 
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
+`Authorization: Bearer API_KEY`
 
 <aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
+You must replace <code>API_KEY</code> with your personal API key.
 </aside>
 
-# Kittens
+# Assets
+## Get All Assets
 
-## Get All Kittens
+> To get all available assets, use this code:
 
-```ruby
-require 'kittn'
+```php
+<?php
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
+  $result = $client->request('GET', 'assets');
+
+?>
 ```
 
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
-
-```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
-```
-
-> The above command returns JSON structured like this:
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
-```
-
-This endpoint retrieves all kittens.
-
-### HTTP Request
-
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
 
 > The above command returns JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+    "available_assets": [
+        "/api/v2/assets",
+        "/api/v2/assets/checklists",
+        "/api/v2/assets/checklists/{id}",
+        "/api/v2/assets/orders",
+        "/api/v2/assets/statistics",
+        "/api/v2/assets/test_results/{id}",
+    ],
+    "status_code": 200
 }
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+This endpoint retrieves all available assets to you.
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`GET https://s3s.eu/api/v2/assets`
 
-### URL Parameters
+## Get a Specific Asset Endpoint
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
+> To get a specific asset, use this code:
 
-## Delete a Specific Kitten
+```php
+<?php
 
-```ruby
-require 'kittn'
+  $client->request('GET', 'assets/checklists/123');
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.delete(2)
+?>
 ```
 
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.delete(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -X DELETE
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.delete(2);
-```
-
-> The above command returns JSON structured like this:
+> The above command will return JSON structured like this:
 
 ```json
 {
-  "id": 2,
-  "deleted" : ":("
+    "data": [
+        {
+            "id": 123,
+            "chassis_serial_number": "C123456789ABCDEF",
+            "assembly_serial_number": "US.2018.213",
+            "service_contract": {
+                "data": {
+                    "name": "Standard Warranty (3 years)",
+                    "description": "3 Years Standard Warranty, advanced replacement is included.",
+                    "duration": 3
+                }
+            },
+            "status": "finished",
+            "created_at": {
+                "date": "2018-01-16 09:42:50.000000",
+                "timezone_type": 3,
+                "timezone": "Europe/Brussels"
+            },
+            "updated_at": {
+                "date": "2018-01-16 14:31:49.000000",
+                "timezone_type": 3,
+                "timezone": "Europe/Brussels"
+            },
+            "server_type": null,
+            "server_reference": null,
+            "built_by_users": [
+                "John", "Jane"
+            ],
+            "items": {
+                "data": [
+                    {
+                        "id": 19,
+                        "display_name": "Case",
+                        "description": "with stand-offs in correct spot",
+                        "category": "Components",
+                        "option": {
+                            "data": {
+                                "type": "checkbox",
+                                "default_settings": {
+                                    "checked": false
+                                }
+                            }
+                        },
+                        "value": true
+                    },
+                    {
+                        "id": 24,
+                        "display_name": "HDD(s)",
+                        "description": "Check if installed.",
+                        "category": "Components",
+                        "option": {
+                            "data": {
+                                "type": "checkbox",
+                                "default_settings": {
+                                    "checked": false
+                                }
+                            }
+                        },
+                        "value": true
+                    },
+                    {
+                        "id": 22,
+                        "display_name": "Heatsink",
+                        "description": "Check if properly attached.",
+                        "category": "Components",
+                        "option": {
+                            "data": {
+                                "type": "checkbox",
+                                "default_settings": {
+                                    "checked": false
+                                }
+                            }
+                        },
+                        "value": true
+                    },
+                    ...
+                ]
+            }
+        }
+    ]
 }
 ```
 
-This endpoint deletes a specific kitten.
+This endpoint retrieves a specific Asset endpoint.
 
 ### HTTP Request
 
-`DELETE http://example.com/kittens/<ID>`
+`GET https://s3s.eu/api/v2/assets/<ASSET>/<?ID>`
 
 ### URL Parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
+Parameter | Description | Required
+--------- | ----------- | -----------
+ASSET | The asset you wish to access | Yes
+ID | The Server reference number for an appliance to retrieve. This is either the asset ID or a BTO specific serial number. | No
+page | If no ID is provided, you can use the `page` parameter to browser through different pages. | No
+page_size | If no ID is provided, you can use the `page_size` parameter to change the amount of resources per page.<br>`Default: 15`<br>`Max: 50` | No
 
+<aside class="notice">
+  If no <code>ID</code> is provided, you will get a list of all available resources in the given asset scope.
+</aside>
