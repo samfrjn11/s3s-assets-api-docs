@@ -5,7 +5,7 @@ The Assets API uses the following response codes:
 
 Response Code | Meaning | Cause
 ---------- | ------- | -------
-200 | Sucsess | Your HTTP requests was successful and a resultset will be returned.
+200 | Success | Your HTTP requests was successful and a resultset will be returned.
 400 | Bad Request | Your request is invalid.
 401 | Unauthorized | Your API key is wrong or not supplied.
 403 | Forbidden | The resource you're trying to access is not associated to your account/company.
